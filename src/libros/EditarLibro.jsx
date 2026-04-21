@@ -1,31 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { obtenerLibroPorId } from "../api/libros";
+import { obtenerLibroPorId, actualizarLibro } from "../api/libros";
 
 function EditarLibro() {
 
   const navigate = useNavigate();
-  const { id } = useParams(); // [NUEVO]
+  const { id } = useParams();
 
-  // =========================
-  // 🧠 ESTADO DEL FORMULARIO
-  // =========================
   const [libro, setLibro] = useState({
     titulo: "",
     autor: "",
     rating: ""
   });
 
-  // =========================
-  // 🔄 CARGAR LIBRO
-  // =========================
   useEffect(() => {
     cargarLibro();
   }, []);
 
   const cargarLibro = async () => {
     try {
-      // [NUEVO]
       const data = await obtenerLibroPorId(id);
       setLibro(data);
     } catch (error) {
@@ -33,14 +26,31 @@ function EditarLibro() {
     }
   };
 
-  // =========================
-  // 📌 MANEJAR INPUTS
-  // =========================
   const handleChange = (e) => {
     setLibro({
       ...libro,
       [e.target.name]: e.target.value
     });
+  };
+
+  // =========================
+  // 💾 GUARDAR CAMBIOS
+  // =========================
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // [NUEVO]
+      await actualizarLibro(id, libro);
+
+      alert("Libro actualizado correctamente ✏️");
+
+      navigate("/");
+
+    } catch (error) {
+      alert("Error al actualizar libro ❌");
+      console.error(error);
+    }
   };
 
   return (
@@ -51,7 +61,7 @@ function EditarLibro() {
         Editar Libro
       </h2>
 
-      <form className="card mt-4 p-4">
+      <form className="card mt-4 p-4" onSubmit={handleSubmit}>
 
         {/* TÍTULO */}
         <div className="mb-3">
@@ -97,7 +107,7 @@ function EditarLibro() {
         {/* BOTONES */}
         <div className="d-flex justify-content-between">
 
-          <button type="button" className="btn btn-success">
+          <button type="submit" className="btn btn-success">
             Guardar Cambios
           </button>
 
