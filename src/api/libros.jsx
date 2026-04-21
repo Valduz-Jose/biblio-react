@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const urlBase = "https://biblioteca-fastapi-uz50.onrender.com/api/libros";
+const urlBase = import.meta.env.VITE_API_URL;
 
 const clienteAxios = axios.create({
   baseURL: urlBase,
