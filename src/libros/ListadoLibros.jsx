@@ -1,22 +1,49 @@
 import { useEffect, useState } from "react";
-import { listarLibros } from "../api/libros";
-import { useNavigate } from "react-router-dom"; // [NUEVO]
+import { listarLibros, eliminarLibro } from "../api/libros";
+import { useNavigate } from "react-router-dom";
 
 function ListadoLibros() {
 
   const [libros, setLibros] = useState([]);
-  const navigate = useNavigate(); // [NUEVO]
+  const navigate = useNavigate();
 
   useEffect(() => {
     cargarLibros();
   }, []);
 
+  // =========================
+  // 📖 CARGAR LIBROS
+  // =========================
   const cargarLibros = async () => {
     try {
       const data = await listarLibros();
       setLibros(data);
     } catch (error) {
       console.error("Error al cargar libros:", error);
+    }
+  };
+
+  // =========================
+  // 🗑️ ELIMINAR LIBRO
+  // =========================
+  const handleEliminar = async (id) => {
+
+    // [NUEVO]
+    const confirmacion = confirm("¿Seguro que deseas eliminar este libro?");
+
+    if (!confirmacion) return;
+
+    try {
+      await eliminarLibro(id);
+
+      alert("Libro eliminado correctamente 🗑️");
+
+      // Refrescar listado
+      cargarLibros();
+
+    } catch (error) {
+      alert("Error al eliminar libro ❌");
+      console.error(error);
     }
   };
 
@@ -29,6 +56,7 @@ function ListadoLibros() {
       </h2>
 
       <div className="mt-4">
+
         <table className="table table-striped table-hover">
 
           <thead className="table-primary">
@@ -37,7 +65,7 @@ function ListadoLibros() {
               <th>Título</th>
               <th>Autor</th>
               <th>Rating</th>
-              <th>Acciones</th> {/* [NUEVO] */}
+              <th>Acciones</th>
             </tr>
           </thead>
 
@@ -50,14 +78,26 @@ function ListadoLibros() {
                   <td>{libro.autor}</td>
                   <td>{libro.rating}</td>
 
-                  <td>
+                  <td className="d-flex gap-2">
+
+                    {/* EDITAR */}
                     <button
                       className="btn btn-primary btn-sm"
-                      onClick={() => navigate(`/editar/${libro.id}`)} // [NUEVO]
+                      onClick={() => navigate(`/editar/${libro.id}`)}
                     >
                       <i className="bi bi-pencil-square me-1"></i>
                       Editar
                     </button>
+
+                    {/* ELIMINAR */}
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleEliminar(libro.id)} // [NUEVO]
+                    >
+                      <i className="bi bi-trash me-1"></i>
+                      Eliminar
+                    </button>
+
                   </td>
 
                 </tr>
@@ -72,6 +112,7 @@ function ListadoLibros() {
           </tbody>
 
         </table>
+
       </div>
 
     </div>
