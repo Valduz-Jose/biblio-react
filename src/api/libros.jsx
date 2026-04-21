@@ -26,11 +26,24 @@ export const listarLibros = async () => {
 // ===============================
 export const crearLibro = async (libro) => {
   try {
-    // [NUEVO]
     const response = await clienteAxios.post("/", libro);
     return response.data;
   } catch (error) {
     console.error("Error al crear libro:", error);
+    throw error;
+  }
+};
+
+// ===============================
+// 🔍 OBTENER LIBRO POR ID
+// ===============================
+export const obtenerLibroPorId = async (id) => {
+  try {
+    // [NUEVO]
+    const response = await clienteAxios.get(`/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener libro con id ${id}:`, error);
     throw error;
   }
 };
