@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// URL base de la API backend
 const urlBase = "http://localhost:8080/api/libros";
 
-// Cliente Axios configurado
 const clienteAxios = axios.create({
   baseURL: urlBase,
 });
@@ -39,11 +37,24 @@ export const crearLibro = async (libro) => {
 // ===============================
 export const obtenerLibroPorId = async (id) => {
   try {
-    // [NUEVO]
     const response = await clienteAxios.get(`/${id}`);
     return response.data;
   } catch (error) {
-    console.error(`Error al obtener libro con id ${id}:`, error);
+    console.error("Error al obtener libro:", error);
+    throw error;
+  }
+};
+
+// ===============================
+// ✏️ ACTUALIZAR LIBRO
+// ===============================
+export const actualizarLibro = async (id, libro) => {
+  try {
+    // [NUEVO]
+    const response = await clienteAxios.put(`/${id}`, libro);
+    return response.data;
+  } catch (error) {
+    console.error("Error al actualizar libro:", error);
     throw error;
   }
 };
