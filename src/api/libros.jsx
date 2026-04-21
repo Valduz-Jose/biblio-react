@@ -50,11 +50,24 @@ export const obtenerLibroPorId = async (id) => {
 // ===============================
 export const actualizarLibro = async (id, libro) => {
   try {
-    // [NUEVO]
     const response = await clienteAxios.put(`/${id}`, libro);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar libro:", error);
+    throw error;
+  }
+};
+
+// ===============================
+// 🗑️ ELIMINAR LIBRO
+// ===============================
+export const eliminarLibro = async (id) => {
+  try {
+    // [NUEVO]
+    const response = await clienteAxios.delete(`/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al eliminar libro:", error);
     throw error;
   }
 };
