@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const urlBase = "http://localhost:8080/api/libros";
+const urlBase = "https://biblioteca-fastapi-uz50.onrender.com/api/libros";
 
 const clienteAxios = axios.create({
   baseURL: urlBase,
